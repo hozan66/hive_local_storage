@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_local_storage/models/person.dart';
 
 // Box is a table in hive where data is stored like this form
 // index key value
@@ -53,14 +54,15 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
-    myBox = Hive.box('myBox');
+    // myBox = Hive.box('myBox');
+    myBox = Hive.box<Person>('person');
   }
 
   @override
   void dispose() {
     super.dispose();
 
-    Hive.close();
+    myBox.close();
   }
 
   @override
@@ -75,27 +77,45 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  addData();
+                  // addData();
+                  debugPrint('addData');
+
+                  myBox.put(
+                    'p1',
+                    Person(
+                      name: 'HOzan',
+                      age: 22,
+                      job: 'Developer',
+                    ),
+                  );
                 },
                 child: const Text('Add Data'),
               ),
               const SizedBox(height: 20.0),
               ElevatedButton(
                 onPressed: () {
-                  getData();
+                  // getData();
+                  debugPrint('getData');
+
+                  if (myBox.isNotEmpty) {
+                    // myBox.get('p1') => consider as object
+                    debugPrint('Name: ${myBox.get('p1').name}');
+                    debugPrint('Age: ${myBox.get('p1').age}');
+                    debugPrint('Job: ${myBox.get('p1').job}');
+                  }
                 },
-                child: const Text('Get Data'),
+                child: const Text('Get  Data'),
               ),
               const SizedBox(height: 20.0),
               ElevatedButton(
                 onPressed: () {
-                  deleteData();
+                  // deleteData();
                 },
                 child: const Text('Delete Data'),
               ),
               ElevatedButton(
                 onPressed: () {
-                  deleteAllData();
+                  // deleteAllData();
                 },
                 child: const Text('Delete All Data'),
               ),
